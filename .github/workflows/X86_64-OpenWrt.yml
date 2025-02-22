@@ -82,8 +82,8 @@ jobs:
 
     - name: Generate Variables
       run: |
-        cp $CONFIG_FILE $OPENWRT_PATH/.config
         cd $OPENWRT_PATH
+        curl -s https://git.kejizero.online/zhao/files/raw/branch/main/Config/x86_64.config > .config
         make defconfig > /dev/null 2>&1
         SOURCE_REPO="$(echo $REPO_URL | awk -F '/' '{print $(NF)}')"
         echo "SOURCE_REPO=$SOURCE_REPO" >> $GITHUB_ENV
@@ -123,7 +123,6 @@ jobs:
     - name: Download DL Package
       run: |
         cd $OPENWRT_PATH
-        curl -s https://git.kejizero.online/zhao/files/raw/branch/main/Config/x86_64.config > .config
         make defconfig
         make download -j8
         find dl -size -1024c -exec ls -l {} \;
