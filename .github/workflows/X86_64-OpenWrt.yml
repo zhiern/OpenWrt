@@ -2,6 +2,12 @@ name: X86_64 OpenWrt
 
 on:
   workflow_dispatch:
+    inputs:
+      lan_addr:
+        description: 'Setting default LAN address'
+        required: true
+        default: '10.0.0.1'
+        type: string
 
 env:
   REPO_URL: https://github.com/openwrt/openwrt
