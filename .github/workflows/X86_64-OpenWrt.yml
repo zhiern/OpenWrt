@@ -108,18 +108,22 @@ jobs:
 
     - name: Load Custom Configuration
       run: |
-        [ -e files ] && mv files $OPENWRT_PATH/files
-        [ -e $CONFIG_FILE ] && mv $CONFIG_FILE $OPENWRT_PATH/.config
-        chmod +x $GITHUB_WORKSPACE/scripts/*.sh
-        chmod +x $DIY_SCRIPT
         cd $OPENWRT_PATH
-        $GITHUB_WORKSPACE/$DIY_SCRIPT
-        $GITHUB_WORKSPACE/scripts/zero.sh
-        $GITHUB_WORKSPACE/scripts/preset-clash-core.sh $CLASH_KERNEL
+        curl -sS -O https://git.kejizero.online/zhao/files/raw/branch/main/OpenWrt/diy-script.sh
+        curl -sS -O https://git.kejizero.online/zhao/files/raw/branch/main/OpenWrt/preset-clash-core.sh
+        curl -sS -O https://git.kejizero.online/zhao/files/raw/branch/main/OpenWrt/custom.sh
+        chmod +x diy-script.sh
+        chmod +x preset-clash-core.sh
+        chmod +x custom.sh
+        ./diy-script.sh
+        ./preset-clash-core.sh
+        ./custom.sh
+
 
     - name: Download DL Package
       run: |
         cd $OPENWRT_PATH
+        curl -s https://git.kejizero.online/zhao/files/raw/branch/main/Config/x86_64.config > .config
         make defconfig
         make download -j8
         find dl -size -1024c -exec ls -l {} \;
